@@ -19,7 +19,8 @@ def main():
     logger.info(s3_parameters)
 
     # Data
-    src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
+    master: mr.Master = src.data.interface.Interface(s3_parameters=s3_parameters).exc()
+    logger.info(master)
 
     # Delete Cache Points
     src.functions.cache.Cache().exc()
@@ -41,9 +42,9 @@ if __name__ == '__main__':
     import src.data.interface
     import src.elements.service as sr
     import src.elements.s3_parameters as s3p
+    import src.elements.master as mr
     import src.functions.cache
     import src.preface.interface
-    import src.transfer.interface
 
     connector: boto3.session.Session
     s3_parameters: s3p
