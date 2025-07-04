@@ -23,4 +23,6 @@ class Config:
         # Keys, etc
         self.s3_parameters_key = 's3_parameters.yaml'
 
-        self.prefix = 'data/raw'
+        # Prefixes
+        self.source = 'data/raw'
+        self.destination = 'data/special'
