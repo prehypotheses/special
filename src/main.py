@@ -50,6 +50,6 @@ if __name__ == '__main__':
     s3_parameters: s3p
     service: sr.Service
     arguments: dict
-    connector, s3_parameters, service = src.preface.interface.Interface().exc()
+    connector, s3_parameters, service, arguments = src.preface.interface.Interface().exc()
 
     main()
