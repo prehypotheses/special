@@ -15,15 +15,18 @@ import src.elements.s3_parameters as s3p
 
 class Interface:
     """
-
+    Resets the FEW NERD (Few-Shot Named Entity Recognition Dataset) dataset; focuses
+    on a particular set of labels.
     """
 
     def __init__(self, master: mr.Master, s3_parameters: s3p.S3Parameters, arguments: dict):
         """
 
-        :param master:
-        :param s3_parameters:
+        :param master: Refer to src.elements.master
+        :param s3_parameters: The overarching S3 parameters settings of this project, e.g., region code
+                              name, buckets, etc.
         :param arguments:
+            https://raw.githubusercontent.com/prehypotheses/configurations/refs/heads/master/data/special/arguments.json
         """
 
         self.__data: datasets.DatasetDict = master.data
@@ -45,8 +48,7 @@ class Interface:
         features = datasets.Features(
             {'id': datasets.Value('string', id=None),
              'tokens': datasets.Sequence(feature=datasets.Value(dtype='string', id=None), length=-1, id=None),
-             'fine_ner_tags': datasets.Sequence(feature=datasets.ClassLabel(names=classes), length=-1, id=None)
-             })
+             'fine_ner_tags': datasets.Sequence(feature=datasets.ClassLabel(names=classes), length=-1, id=None)})
 
         return features
 
@@ -65,15 +67,13 @@ class Interface:
 
     def exc(self):
         """
-        
+
         :return:
         """
 
-        # Preference
+        # Preference & Reference
         preference = pf.Preference(
             arguments=self.__arguments).__call__()
-
-        # Reference
         reference = rf.Reference(id2label=self.__arguments.get('id2label'))
 
         # Mapping the old set up, reference, to the tags in focus, preference
@@ -88,8 +88,7 @@ class Interface:
         packets = datasets.DatasetDict({
             'train': recode(feed=self.__data['train']),
             'validation': recode(feed=self.__data['validation']),
-            'test': recode(feed=self.__data['test'])
-        })
+            'test': recode(feed=self.__data['test'])})
         logging.info(packets)
 
         self.__persist(packets=packets)
