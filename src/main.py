@@ -17,9 +17,15 @@ def main():
     logger: logging.Logger = logging.getLogger(__name__)
     logger.info('Starting: %s', datetime.datetime.now().isoformat(timespec='microseconds'))
     logger.info(s3_parameters)
+    logger.info(arguments)
 
     # Data
-    src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
+    master: mr.Master = src.data.interface.Interface(s3_parameters=s3_parameters).exc()
+    logger.info(master)
+
+    # Recoding
+    src.algorithms.interface.Interface(
+        master=master, s3_parameters=s3_parameters, arguments=arguments).exc()
 
     # Delete Cache Points
     src.functions.cache.Cache().exc()
@@ -38,17 +44,18 @@ if __name__ == '__main__':
                         datefmt='%Y-%m-%d %H:%M:%S')
 
     # Modules
+    import src.algorithms.interface
     import src.data.interface
     import src.elements.service as sr
     import src.elements.s3_parameters as s3p
+    import src.elements.master as mr
     import src.functions.cache
     import src.preface.interface
-    import src.transfer.interface
 
     connector: boto3.session.Session
     s3_parameters: s3p
     service: sr.Service
     arguments: dict
-    connector, s3_parameters, service = src.preface.interface.Interface().exc()
+    connector, s3_parameters, service, arguments = src.preface.interface.Interface().exc()
 
     main()

@@ -1,4 +1,4 @@
-"""Module initial.py"""
+"""Module setup.py"""
 import sys
 
 import config
@@ -11,7 +11,7 @@ import src.s3.keys
 import src.s3.prefix
 
 
-class Initial:
+class Setup:
     """
     Description
     -----------
@@ -32,7 +32,7 @@ class Initial:
         self.__bucket_name = self.__s3_parameters.internal
 
         # Configurations, etc.
-        self.__configurations = config.Config()
+        self.__destination = config.Config().destination
 
     def __clear_prefix(self) -> bool:
         """
@@ -44,7 +44,7 @@ class Initial:
         instance = src.s3.prefix.Prefix(service=self.__service, bucket_name=self.__bucket_name)
 
         # Get the keys therein
-        keys: list[str] = instance.objects(prefix=self.__configurations.prefix)
+        keys: list[str] = instance.objects(prefix=self.__destination)
 
         if len(keys) > 0:
             objects = [{'Key' : key} for key in keys]
@@ -61,8 +61,7 @@ class Initial:
         """
 
         # An instance for interacting with Amazon S3 buckets.
-        bucket = src.s3.bucket.Bucket(service=self.__service,
-                                      location_constraint=self.__s3_parameters.location_constraint,
+        bucket = src.s3.bucket.Bucket(service=self.__service, location_constraint=self.__s3_parameters.location_constraint,
                                       bucket_name=self.__bucket_name)
 
         # If the bucket exist, the prefix path is cleared.  Otherwise, the bucket is created.
