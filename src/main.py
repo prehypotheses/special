@@ -17,6 +17,7 @@ def main():
     logger: logging.Logger = logging.getLogger(__name__)
     logger.info('Starting: %s', datetime.datetime.now().isoformat(timespec='microseconds'))
     logger.info(s3_parameters)
+    logger.info(arguments)
 
     # Data
     master: mr.Master = src.data.interface.Interface(s3_parameters=s3_parameters).exc()
