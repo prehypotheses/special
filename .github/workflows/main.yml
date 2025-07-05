@@ -1,4 +1,4 @@
-name: 'An Alternative Data Dictionary for Token Classification'
+name: 'Special Token Classification Data'
 
 on: [push]
 
