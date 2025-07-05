@@ -8,17 +8,15 @@ class Mappings:
     Extracting a mix of fine & coarse labels
     """
 
-    def __init__(self, reference: pd.DataFrame, preference: pd.DataFrame, arguments: dict):
+    def __init__(self, reference: pd.DataFrame, preference: pd.DataFrame):
         """
 
         :param reference:
         :param preference:
-        :param arguments:
         """
 
         self.__reference = reference
         self.__preference = preference
-        self.__arguments = arguments
 
     def __grains(self, grain: str):
         """
