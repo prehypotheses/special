@@ -22,6 +22,10 @@ def main():
     master: mr.Master = src.data.interface.Interface(s3_parameters=s3_parameters).exc()
     logger.info(master)
 
+    # Recoding
+    src.algorithms.interface.Interface(
+        master=master, s3_parameters=s3_parameters, arguments=arguments).exc()
+
     # Delete Cache Points
     src.functions.cache.Cache().exc()
 
@@ -39,6 +43,7 @@ if __name__ == '__main__':
                         datefmt='%Y-%m-%d %H:%M:%S')
 
     # Modules
+    import src.algorithms.interface
     import src.data.interface
     import src.elements.service as sr
     import src.elements.s3_parameters as s3p
