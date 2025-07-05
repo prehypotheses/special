@@ -1,10 +1,18 @@
-
+"""Module reference.py"""
 import pandas as pd
 
 
 class Reference:
+    """
+    Returns a data frame that includes the fine named entity
+    recognition (NER) codes and their names.
+    """
 
     def __init__(self, id2label: dict):
+        """
+
+        :param id2label: A dictionary of named entity recognition (NER) labels and their codes
+        """
 
         self.__id2label = id2label
 
@@ -16,7 +24,7 @@ class Reference:
 
         return frame
 
-    def __call__(self):
+    def __call__(self) -> pd.DataFrame:
         """
 
         :return:
