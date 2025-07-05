@@ -1,4 +1,6 @@
 """Module preference.py"""
+import logging
+
 import pandas as pd
 
 
@@ -31,5 +33,6 @@ class Preference:
         # An additional field of alternative labels names
         frame['label'] = frame['name']
         frame['label'] = frame['label'].replace(to_replace=self.__rename).values
+        logging.info(frame)
 
         return frame
