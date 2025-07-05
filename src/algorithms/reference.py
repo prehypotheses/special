@@ -31,7 +31,11 @@ class Reference:
     def __call__(self) -> pd.DataFrame:
         """
 
-        :return:
+        :return: A data frame that has the fields<br>
+            code: Identification code.
+            name: name = `parent` + `-` + `branch`
+            parent: cf. coarse entity.  Equivalent.
+            branch: The children of a coarse entity.
         """
 
         # Get the data frame of Fine NER Tags, i.e., the contents of self.__id2label as a data frame.
@@ -41,6 +45,5 @@ class Reference:
         # of a Coarse NER Tag and a branch of the coarse tag.
         splits = frame['name'].str.split(pat='-', n=1, expand=True)
         splits.rename(columns={0: 'parent', 1: 'branch'}, inplace=True)
-
 
         return frame.copy().join(splits, how='left')
