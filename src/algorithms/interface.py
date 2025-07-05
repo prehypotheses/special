@@ -1,20 +1,30 @@
+"""Module interface.py"""
 import logging
+
 import datasets
 import pandas as pd
 
 import config
+import src.algorithms.mappings
+import src.algorithms.preference as pf
+import src.algorithms.recode
+import src.algorithms.reference as rf
 import src.elements.master as mr
 import src.elements.s3_parameters as s3p
 
-import src.algorithms.reference as rf
-import src.algorithms.preference as pf
-import src.algorithms.mappings
-import src.algorithms.recode
-
 
 class Interface:
+    """
+
+    """
 
     def __init__(self, master: mr.Master, s3_parameters: s3p.S3Parameters, arguments: dict):
+        """
+
+        :param master:
+        :param s3_parameters:
+        :param arguments:
+        """
 
         self.__data: datasets.DatasetDict = master.data
         self.__s3_parameters = s3_parameters
@@ -24,6 +34,11 @@ class Interface:
 
     @staticmethod
     def __get_features(preference: pd.DataFrame) -> datasets.Features:
+        """
+
+        :param preference:
+        :return:
+        """
 
         classes = preference['label'].tolist()
 
@@ -49,6 +64,10 @@ class Interface:
                      self.__configurations.destination)
 
     def exc(self):
+        """
+        
+        :return:
+        """
 
         # Preference
         preference = pf.Preference(
