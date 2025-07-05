@@ -1,30 +1,66 @@
+"""Module mappings.py"""
+import logging
+
 import pandas as pd
 
 class Mappings:
+    """
+    Extracting a mix of fine & coarse labels
+    """
 
     def __init__(self, reference: pd.DataFrame, preference: pd.DataFrame, arguments: dict):
+        """
+
+        :param reference:
+        :param preference:
+        :param arguments:
+        """
 
         self.__reference = reference
         self.__preference = preference
         self.__arguments = arguments
 
     def __grains(self, grain: str):
+        """
+
+        :param grain:
+        :return:
+        """
 
         return self.__reference.loc[self.__reference['parent'].isin(grain), :]
 
+    def __coarse(self):
+        """
+
+        :return:
+        """
+
+        grains = self.__grains(grain='coarse')
+
+        # Focusing on the coarse labels of interest
+        instances = grains[['code', 'parent']].merge(
+            self.__preference[['identifier', 'name']], left_on='parent', right_on='name')
+
+        # The fields of interest are `code`, `identifier`, `name`
+        instances.drop(columns='parent', inplace=True)
+
+        return instances
+
+    def __fine(self):
+        """
+
+        :return:
+        """
+
+        grains = self.__grains(grain='fine')
+
+        # Focusing on the coarse labels of interest
+        instances = grains[['code', 'name']].merge(
+            self.__preference[['identifier', 'name']], how='left', on='name')
+        instances['identifier'] = instances['identifier'].fillna(value=0).astype(int).values
+
+        return instances
+
     def exc(self):
 
-        # Linear
-        coarse = self.__grains(grain='coarse')
-        linear = coarse[['code', 'parent']].merge(
-            self.__preference[['identifier', 'name']], left_on='parent', right_on='name')
-        linear.drop(columns='parent', inplace=True)
-
-
-        # Intricate
-        fine = self.__grains(grain='fine')
-        intricate = fine[['code', 'name']].merge(
-            self.__preference[['identifier', 'name']], how='left', on='name')
-        intricate['identifier'] = intricate['identifier'].fillna(value=0).astype(int).values
-
-        mappings = pd.concat([intricate, linear], ignore_index=True)
+        mappings = pd.concat([self.__fine(), self.__coarse()], ignore_index=True)
