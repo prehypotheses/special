@@ -16,7 +16,11 @@ class Reference:
 
         self.__id2label = id2label
 
-    def __get_frame(self):
+    def __get_frame(self) -> pd.DataFrame:
+        """
+
+        :return:
+        """
 
         frame = pd.DataFrame.from_dict(self.__id2label, orient='index')
         frame.reset_index(drop=False, inplace=True)
