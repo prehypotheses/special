@@ -1,7 +1,10 @@
+import logging
 import datasets
 import pandas as pd
 
+import config
 import src.elements.master as mr
+import src.elements.s3_parameters as s3p
 
 import src.algorithms.reference as rf
 import src.algorithms.preference as pf
@@ -11,10 +14,13 @@ import src.algorithms.recode
 
 class Interface:
 
-    def __init__(self, master: mr.Master, arguments: dict):
+    def __init__(self, master: mr.Master, s3_parameters: s3p.S3Parameters, arguments: dict):
 
         self.__data: datasets.DatasetDict = master.data
+        self.__s3_parameters = s3_parameters
         self.__arguments: dict = arguments
+
+        self.__configurations = config.Config()
 
     @staticmethod
     def __get_features(preference: pd.DataFrame) -> datasets.Features:
@@ -28,6 +34,19 @@ class Interface:
              })
 
         return features
+
+    def __persist(self, packets: datasets.DatasetDict):
+        """
+
+        :param packets:
+        :return:
+        """
+
+        dataset_dict_path = 's3://' + self.__s3_parameters.internal + '/' + self.__configurations.destination
+        packets.save_to_disk(dataset_dict_path=dataset_dict_path)
+
+        logging.info('The special datasets.DatasetDict has been written to prefix: %s',
+                     self.__configurations.destination)
 
     def exc(self):
 
@@ -47,11 +66,11 @@ class Interface:
 
         # Recoding
         recode = src.algorithms.recode.Recode(mappings=mappings, features=features)
-
-        datasets.DatasetDict({
+        packets = datasets.DatasetDict({
             'train': recode(feed=self.__data['train']),
             'validation': recode(feed=self.__data['validation']),
             'test': recode(feed=self.__data['test'])
         })
+        logging.info(packets)
 
-
+        self.__persist(packets=packets)
