@@ -43,6 +43,7 @@ class Mappings:
 
         # The fields of interest are `code`, `identifier`, `name`
         instances.drop(columns='parent', inplace=True)
+        logging.info('COARSE:\n%s', instances)
 
         return instances
 
@@ -58,9 +59,16 @@ class Mappings:
         instances = grains[['code', 'name']].merge(
             self.__preference[['identifier', 'name']], how='left', on='name')
         instances['identifier'] = instances['identifier'].fillna(value=0).astype(int).values
+        logging.info('FINE:\n%s', instances)
 
         return instances
 
-    def exc(self):
+    def exc(self) -> pd.DataFrame:
+        """
+
+        :return:
+        """
 
         mappings = pd.concat([self.__fine(), self.__coarse()], ignore_index=True)
+
+        return mappings
