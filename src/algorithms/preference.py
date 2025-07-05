@@ -16,7 +16,7 @@ class Preference:
         self.__preference: list = arguments.get('preference')
         self.__rename: dict = arguments.get('rename')
 
-    def __call__(self):
+    def __call__(self) -> pd.DataFrame:
         """
 
         :return:
