@@ -16,11 +16,13 @@ class Preference:
         self.__preference: list = arguments.get('preference')
         self.__rename: dict = arguments.get('rename')
 
-
     def __call__(self):
         """
 
         :return:
+            identifier:
+            name:
+            label:
         """
 
         # A data frame consisting of the labels of interest
