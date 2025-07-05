@@ -9,15 +9,17 @@ class Mappings:
     Extracting a mix of fine & coarse labels
     """
 
-    def __init__(self, reference: pd.DataFrame, preference: pd.DataFrame):
+    def __init__(self, reference: pd.DataFrame, preference: pd.DataFrame, arguments: dict):
         """
 
         :param reference:
         :param preference:
+        :param arguments:
         """
 
         self.__reference = reference
         self.__preference = preference
+        self.__arguments = arguments
 
     def __grains(self, grain: str):
         """
@@ -26,7 +28,9 @@ class Mappings:
         :return:
         """
 
-        return self.__reference.loc[self.__reference['parent'].isin(grain), :]
+        values = self.__arguments.get(grain)
+
+        return self.__reference.loc[self.__reference['parent'].isin(values), :]
 
     def __coarse(self):
         """
