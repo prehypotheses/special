@@ -29,7 +29,7 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f ${{ github.workspace }}/.devcontainer/requirements.txt ]; then pip install -r ${{ github.workspace }}/.devcontainer/requirements.txt; fi
 
-      - name: Lint with flake8
+      - name: flake8
         run: |
           printf "\n"
           echo "============================= flake8 session starts =============================="
@@ -83,7 +83,7 @@ jobs:
           flake8 --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics src/s3
 
 
-      - name: Lint with pylint
+      - name: pylint
         run: |
           printf "\n"
           echo "============================= pylint session starts =============================="
@@ -107,7 +107,7 @@ jobs:
           pylint --rcfile .pylintrc src/s3
 
 
-      - name: Test with pytest
+      - name: pytest
         run: |
           printf "\n"
           echo "============================= pytest session starts =============================="
@@ -115,7 +115,7 @@ jobs:
           printf "\n pytest tests/.../"
           printf "pytest -o python_files=test_*"
 
-      - name: Coverage with pytest-cov
+      - name: pytest-cov
         run: |
           printf "\n "
           echo "============================= coverage session starts =============================="
