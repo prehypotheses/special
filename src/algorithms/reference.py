@@ -1,4 +1,6 @@
 """Module reference.py"""
+import logging
+
 import pandas as pd
 
 
@@ -46,4 +48,7 @@ class Reference:
         splits = frame['name'].str.split(pat='-', n=1, expand=True)
         splits.rename(columns={0: 'parent', 1: 'branch'}, inplace=True)
 
-        return frame.copy().join(splits, how='left')
+        frame = frame.copy().join(splits, how='left')
+        logging.info(frame)
+
+        return frame
