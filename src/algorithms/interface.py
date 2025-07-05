@@ -29,7 +29,7 @@ class Interface:
             https://raw.githubusercontent.com/prehypotheses/configurations/refs/heads/master/data/special/arguments.json
         """
 
-        self.__data: datasets.DatasetDict = master.data
+        self.__master = master
         self.__s3_parameters = s3_parameters
         self.__arguments: dict = arguments
 
@@ -72,13 +72,12 @@ class Interface:
         """
 
         # Preference & Reference
-        preference = pf.Preference(
-            arguments=self.__arguments).__call__()
-        reference = rf.Reference(id2label=self.__arguments.get('id2label'))
+        preference = pf.Preference(arguments=self.__arguments).__call__()
+        reference = rf.Reference(id2label=self.__master.id2label).__call__()
 
         # Mapping the old set up, reference, to the tags in focus, preference
         mappings = src.algorithms.mappings.Mappings(
-            reference=reference(), preference=preference).exc()
+            reference=reference, preference=preference, arguments=self.__arguments).exc()
 
         # The datasets.Features
         features = self.__get_features(preference=preference)
@@ -86,9 +85,9 @@ class Interface:
         # Recoding
         recode = src.algorithms.recode.Recode(mappings=mappings, features=features)
         packets = datasets.DatasetDict({
-            'train': recode(feed=self.__data['train']),
-            'validation': recode(feed=self.__data['validation']),
-            'test': recode(feed=self.__data['test'])})
+            'train': recode(feed=self.__master.data['train']),
+            'validation': recode(feed=self.__master.data['validation']),
+            'test': recode(feed=self.__master.data['test'])})
         logging.info(packets)
 
         self.__persist(packets=packets)
