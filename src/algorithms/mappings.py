@@ -3,6 +3,7 @@ import logging
 
 import pandas as pd
 
+
 class Mappings:
     """
     Extracting a mix of fine & coarse labels
