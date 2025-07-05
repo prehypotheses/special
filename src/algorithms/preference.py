@@ -19,7 +19,7 @@ class Preference:
 
     def __call__(self):
         """
-        
+
         :return:
         """
 
