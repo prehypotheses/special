@@ -20,7 +20,7 @@ class Preference:
         """
 
         :return:
-            identifier:
+            identifier: This will be the code of the selected name/label
             name:
             label:
         """
