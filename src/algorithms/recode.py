@@ -1,6 +1,9 @@
 """Module recode.py"""
-import pandas as pd
+import collections
+import logging
+
 import datasets
+import pandas as pd
 
 
 class Recode:
@@ -29,5 +32,7 @@ class Recode:
         frame = feed.to_pandas()
         frame.drop(columns='ner_tags', inplace=True)
         frame['fine_ner_tags'] = frame['fine_ner_tags'].apply(lambda x: list(map(self.__recode.get, x)))
+
+        logging.info(frame['fine_ner_tags'].map(collections.Counter).sum())
 
         return datasets.Dataset.from_pandas(frame, self.__features)
