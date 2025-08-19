@@ -72,7 +72,7 @@ class Interface:
         """
 
         # Preference & Reference
-        preference = pf.Preference(arguments=self.__arguments).__call__()
+        preference = pf.Preference(arguments=self.__arguments, bucket=self.__s3_parameters.internal).__call__()
         reference = rf.Reference(id2label=self.__master.id2label).__call__()
 
         # Mapping the old set up, reference, to the tags in focus, preference
