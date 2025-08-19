@@ -27,3 +27,5 @@ class Config:
         # Prefixes
         self.source = 'data/raw'
         self.destination = 'data/special'
+
+        self.destination_tags = 'tags/special'
